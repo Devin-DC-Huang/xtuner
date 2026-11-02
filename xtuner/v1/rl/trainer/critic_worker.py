@@ -76,8 +76,8 @@ class CriticWorker(RoleWorker):
             raise ValueError("optimizer_steps_per_pass must be positive.")
         model_cfg = worker_cfg.model_cfg
         head_cfg = model_cfg.text_config if isinstance(model_cfg, BaseComposeConfig) else model_cfg
-        if getattr(head_cfg, "head_type", "lm_head") != "value_head":
-            raise ValueError("CriticWorker requires model_cfg.head_type='value_head'")
+        if head_cfg.head_config.type != "value_head":
+            raise ValueError("CriticWorker requires model_cfg.head_config.type='value_head'")
         fsdp_cfg = host.config.fsdp_cfg
         self.engine = TrainEngine(
             optim_cfg=worker_cfg.optim_cfg,

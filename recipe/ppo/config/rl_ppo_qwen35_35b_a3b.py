@@ -38,7 +38,7 @@ from xtuner.v1.train.rl_trainer import RLDisaggregatedTrainerConfig
 
 def _set_head_type(config, head_type: str):
     """Set the output-head kind on a compose model."""
-    config.text_config.head_type = head_type
+    config.text_config.head_config.type = head_type
     return config
 
 

@@ -19,9 +19,9 @@ from xtuner.v1.rl.trainer import CriticWorkerConfig, WorkerConfig
 def _set_head_type(config, head_type: str):
     """Set the output-head kind for dense or composed model configs."""
     if hasattr(config, "text_config"):
-        config.text_config.head_type = head_type
+        config.text_config.head_config.type = head_type
     else:
-        config.head_type = head_type
+        config.head_config.type = head_type
     return config
 
 

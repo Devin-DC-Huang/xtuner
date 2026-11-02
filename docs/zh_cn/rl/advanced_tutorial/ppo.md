@@ -2,7 +2,7 @@
 
 PPO 在 actor 的 policy loss 之外再训一个 value head。Critic 不是第二组 Ray actor，而是挂在 actor 的 `TrainingWorker` 上，配置写在 `WorkerConfig.critic_cfg`。两边共用训练卡，由 `switch_role_modules` 换上换下：先切到 critic，`collect_values` 取 value，`GAEEstimator.compute_gae` 算出 actor advantage 和 critic return，再 `critic.fit`，然后切回 actor 做 policy 更新。
 
-Critic 模型配置的 `head_type` 必须是 `"value_head"`。checkpoint 里没有 value head 权重时，这个头用 `Normal(0, 1 / (hidden_size + 1))` 初始化，其余权重从 checkpoint 加载。Actor 的 `head_type` 是 `"lm_head"`。
+Critic 模型配置的 `head_config.type` 必须是 `"value_head"`。checkpoint 里没有 value head 权重时，这个头用 `Normal(0, 1 / (hidden_size + 1))` 初始化，其余权重从 checkpoint 加载。Actor 的 `head_config.type` 是 `"lm_head"`。
 
 Critic 前向不使用 rollout 记录的 expert id。`seq_ctx.rollout_routed_experts` 在进 critic 前被置成 `None`，MoE router 按 critic 自己的 logits 选 expert。这些 ObjectRef 留给后面的 actor `fit` 再取、再释放。
 

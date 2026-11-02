@@ -41,6 +41,7 @@ import torch
 from xtuner.v1.config import AdamWConfig, FSDPConfig
 from xtuner.v1.config.optim import LRConfig
 from xtuner.v1.data_proto.rl_data import RolloutState
+from xtuner.v1.model.base import HeadConfig
 from xtuner.v1.model.dense.qwen3 import Qwen3Dense0P6BConfig
 from xtuner.v1.rl.advantage import GAEAdvantageConfig, GAEEstimator
 from xtuner.v1.rl.advantage.gae import action_gae, terminal_rewards
@@ -260,7 +261,7 @@ class TestCriticConstruction(unittest.TestCase):
         self.assertNotIn("fsdp_cfg", CriticWorkerConfig.model_fields)
         self.assertNotIn("sp_size", CriticWorkerConfig.model_fields)
 
-        model_cfg = Qwen3Dense0P6BConfig(head_type="value_head")
+        model_cfg = Qwen3Dense0P6BConfig(head_config=HeadConfig(type="value_head"))
         critic_cfg = CriticWorkerConfig(
             model_cfg=model_cfg,
             optim_cfg=AdamWConfig(lr=1e-6, foreach=False),
